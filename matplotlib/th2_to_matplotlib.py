@@ -1,0 +1,66 @@
+#www.larbys.com
+import ROOT
+from ROOT import TRandom3
+
+import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
+
+rand = TRandom3(0)
+
+#Make TCanvas+TH2D
+c1 = ROOT.TCanvas()
+c1.cd()
+th2d = ROOT.TH2D("th",";;",15,0,5,10,0,2)
+
+#Fill with TRandom data
+for i in xrange(1000):
+    th2d.Fill(rand.Gaus(.3,0.9),
+              rand.Gaus(.5,0.1))
+
+#Draw TH2D
+th2d.Draw("COLZ")
+c1.Update()
+
+# numpy read raw TArray buffer that TH2D is sitting on, +2 on box nBins...
+data  = np.frombuffer(th2d.GetArray(),count=th2d.GetSize())
+
+#split the data on Y
+data  = np.array(np.split(data,th2d.GetNbinsY()+2))
+
+#remove overflow/underflow
+data = data[1:-1,1:-1]
+
+#draw in pyplot
+fig,ax = plt.subplots(figsize=(10,6))
+
+#matshow mimics output of TH2D.Draw("COLZ"), put the origin a the bottom like ROOT
+cb = ax.matshow(data,origin='lower')
+
+#Move the xticks down there
+ax.xaxis.set_ticks_position('bottom')
+
+#Set the XTicks to be the same as default on TCanvas
+nticks = float(10.0)
+nbinsx = th2d.GetNbinsX()
+nbinsy = th2d.GetNbinsY()
+
+ax.set_xticks(np.arange(0,nbinsx,1))
+ax.set_yticks(np.arange(0,nbinsy,1))
+
+#Set the labels to match whats on TCanvas
+print np.arange(0,nbinsx,nticks)
+print np.around(np.linspace(0,th2d.GetXaxis().GetXmax(),nbinsx),2)
+
+ax.set_xticklabels(np.around(np.linspace(0,th2d.GetXaxis().GetXmax(),nbinsx),2))
+
+#ROOT doesn't have GetYmax L.O.L.
+ax.set_yticklabels(np.around(np.linspace(0,th2d.GetYaxis().GetXmax(),nbinsy),2)) 
+
+#Z axis like root
+plt.colorbar(cb)
+
+#Draw
+plt.show()
+
+
