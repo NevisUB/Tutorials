@@ -11,18 +11,19 @@ fig, ax = plt.subplots(figsize=(15,7))
 
 # load file
 if not(os.path.isfile('data/larlite_opdigit.root')):
-    os.system('wget http://www.nevis.columbia.edu/~dcaratelli/showandtell/larlite_opdigit.root data/')
+    os.system('wget http://www.nevis.columbia.edu/~dcaratelli/showandtell/larlite_opdigit.root data/.')
+    cmd =  'mv larlite_opdigit.root data/.'
+    os.system(cmd)
 
+# open the root file
 f = ROOT.TFile('data/larlite_opdigit.root')
 t = f.Get("opdigit_pmtreadout_tree")
 trig = f.Get("trigger_daq_tree")
 
 
+# loop through the entries in this TTree
 for entry in xrange(t.GetEntries()):
 
-    #ax.cla()
-    #fig.gca()
-    
     t.GetEntry(entry)
     trig.GetEntry(entry)
 
@@ -39,12 +40,13 @@ for entry in xrange(t.GetEntries()):
         
         ch = opdigit.ChannelNumber()
 
-        #if (ch < 100 or ch >= 132):
-        #if (ch != 109):
-        #    continue
+        # skip waveforms not coming from physical PMTs
+        if (ch < 100 or ch >= 132):
+            continue
         
         print 'Channel number: ',ch
 
+        # clear the axes
         ax.cla()
         fig.gca()
 
@@ -54,15 +56,9 @@ for entry in xrange(t.GetEntries()):
         
         plt.plot(adc_v)
         plt.grid(True)
-        #plt.axvspan(baseline_start,baseline_end,facecolor='k',alpha=0.5,label='Baseline Region')
-        #plt.axvspan(pulse_start,pulse_end,facecolor='r',alpha=0.5,label='Pulse Region')
         plt.title('Wf for Chan %i, Entry %i'%(ch,entry))
-        #plt.xlim([baseline_start-100,pulse_end+100])
-        #plt.xlim([0,30])
-        #plt.ylim([2000,4100])
         plt.xlabel('Tick Number [64 MHz - 15.625 ns]')
         plt.ylabel('ADC Counts')
-        #plt.legend(loc=2)
         
         fig.canvas
         fig.canvas.draw()

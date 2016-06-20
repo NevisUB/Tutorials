@@ -22,7 +22,9 @@ pot_NUMI = 2.46+2.37
 
 # load file
 if not(os.path.isfile('data/daq_hist_small.root')):
-    os.system('wget http://www.nevis.columbia.edu/~dcaratelli/showandtell/daq_hist_small.root data/')
+    os.system('wget http://www.nevis.columbia.edu/~dcaratelli/showandtell/daq_hist_small.root .')
+    cmd = 'mv daq_hist_small.root data/.'
+    os.system(cmd)
 
 f = ROOT.TFile("data/daq_hist_small.root")
 t = f.Get("opflash_tree_filtered")
@@ -48,13 +50,6 @@ normed_err = EXT_err/EXT_rate
 print 'EXT total number of flashes in 23 us window : ',len(dt_EXT)
 print 'EXT rate [counts / us]   = ',EXT_rate
 print 'EXT events : ',EXT_events
-
-# average external rate
-#avg_EXT = np.average(vals)
-#err_EXT = np.sqrt(avg_EXT * EXT_events) / EXT_events
-#normed_err = err_EXT/avg_EXT
-#print 'the average external rate is ',avg_EXT
-#print 'the error on the external rate is ',err_EXT
 
 tbin_BNB = 0.15
 tmin_BNB = 0.1
