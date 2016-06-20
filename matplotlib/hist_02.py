@@ -1,4 +1,4 @@
-# 1st histogram lesson
+# new histogram lesson
 # how to use histograms in matplotlib
 # in this example we present how to share one axis
 # so that we can draw two curves with different scales
