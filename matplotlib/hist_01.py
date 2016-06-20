@@ -1,4 +1,4 @@
-# 1st histogram lesson
+# new histogram lesson
 # how to use histograms in matplotlib
 # in this script we focus on representing histogrammed data
 # as data-points w/ error bars
