@@ -14,7 +14,7 @@ passing = int(sys.argv[-1])
 k=TEfficiency()
 k.SetStatisticOption(TEfficiency.kFFC)
 
-# get +/- 1 sigma interval from Feldman Cousincs statistics
+# get +/- 1 sigma interval from Feldman Cousins statistics
 eff       = passing/float(tot)
 eff_upper = k.FeldmanCousins(tot,passing,0.6827,True)
 eff_lower = k.FeldmanCousins(tot,passing,0.6827,False)
